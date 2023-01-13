@@ -3,6 +3,7 @@ package com.fomichev.alarmmessager
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +30,9 @@ import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
+    val PENDING_INTENT_FLAG_IMMUTABLE =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -49,7 +53,7 @@ class MainActivity : ComponentActivity() {
     private fun startAlarm() {
         val intent = Intent(this, AlarmReceiver::class.java)
         intent.putExtra("time", 100L)
-        val pIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+        val pIntent = PendingIntent.getBroadcast(this, 0, intent, PENDING_INTENT_FLAG_IMMUTABLE)
         val am = getSystemService(ALARM_SERVICE) as AlarmManager
         am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 4000, pIntent)
     }
@@ -58,11 +62,6 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainPagerScreen(onStart: () -> Unit) {
-    Button(
-        onClick = onStart
-    ){
-        Text(text = "Stat")
-    }
     val tabData = listOf(
         "MUSIC" to Icons.Filled.Home,
         "MARKET" to Icons.Filled.ShoppingCart,
@@ -110,6 +109,11 @@ fun MainPagerScreen(onStart: () -> Unit) {
                 Text(
                     text = tabData[index].first,
                 )
+                Button(
+                    onClick = onStart
+                ){
+                    Text(text = "Stat")
+                }
             }
         }
     }
