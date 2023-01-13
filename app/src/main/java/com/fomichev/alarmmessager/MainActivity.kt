@@ -1,6 +1,6 @@
 package com.fomichev.alarmmessager
 
-import android.R.attr.action
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting {
+                    MainPagerScreen {
                         startAlarm()
                     }
                 }
@@ -39,12 +39,13 @@ class MainActivity : ComponentActivity() {
         val intent = Intent(this, AlarmReceiver::class.java)
         intent.putExtra("time", 100L)
         val pIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-        sendBroadcast(intent)
+        val am = getSystemService(ALARM_SERVICE) as AlarmManager
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 4000, pIntent)
     }
 }
 
 @Composable
-fun Greeting(onStart: () -> Unit) {
+fun MainPagerScreen(onStart: () -> Unit) {
     Button(
         onClick = onStart
     ){
@@ -56,6 +57,6 @@ fun Greeting(onStart: () -> Unit) {
 @Composable
 fun DefaultPreview() {
     AlarmMessagerTheme {
-        Greeting({})
+        MainPagerScreen({})
     }
 }
