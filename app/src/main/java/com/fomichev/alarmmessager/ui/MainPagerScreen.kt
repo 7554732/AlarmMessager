@@ -26,16 +26,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainPagerScreen(onStart: () -> Unit) {
     val tabData = listOf(
-        "MUSIC" to Icons.Filled.Home,
-        "MARKET" to Icons.Filled.ShoppingCart,
-        "FILMS" to Icons.Filled.AccountBox,
-        "BOOKS" to Icons.Filled.Settings,
+        "START" to Icons.Filled.Home,
+        "CONFIG" to Icons.Filled.Settings,
     )
     val pagerState = rememberPagerState(
         pageCount = tabData.size,
         initialOffscreenLimit = 2,
         infiniteLoop = true,
-        initialPage = 1,
+        initialPage = 0,
     )
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
@@ -63,19 +61,9 @@ fun MainPagerScreen(onStart: () -> Unit) {
         HorizontalPager(
             state = pagerState,
         ) { index ->
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = tabData[index].first,
-                )
-                Button(
-                    onClick = onStart
-                ){
-                    Text(text = "Stat")
-                }
+            when(index) {
+                0 -> StartScreen(onStart)
+                1 -> ConfigScreen()
             }
         }
     }
