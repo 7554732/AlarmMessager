@@ -1,5 +1,6 @@
 package com.fomichev.alarmmessager.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,9 @@ fun StartScreen(onStart: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        TimePicker({ h,m ->
+            Log.d("TimePicker ", "" + h + " " + m)
+        })
         Button(
             onClick = onStart
         ) {
