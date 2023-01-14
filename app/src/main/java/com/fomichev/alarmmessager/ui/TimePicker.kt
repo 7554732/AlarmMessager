@@ -1,26 +1,27 @@
 package com.fomichev.alarmmessager.ui
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.widget.TimePicker
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.fomichev.alarmmessager.R
+import com.fomichev.alarmmessager.databinding.TimePickerBinding
 
 @Composable
 fun TimePicker(
+    hour: Int = 0,
+    minute: Int = 30,
     onTimeSelected: (hour: Int, minute: Int) -> Unit
 ) {
     AndroidView(
         modifier = Modifier.fillMaxWidth(),
         factory = { context ->
-            val view = LayoutInflater.from(context).inflate(R.layout.time_picker, null)
-            val timePicker = view.findViewById<TimePicker>(R.id.timePicker)
+            val timePicker = TimePickerBinding.inflate(LayoutInflater.from(context)).timePicker
 
-            timePicker.hour = 0
-            timePicker.minute = 30
             timePicker.setIs24HourView(true)
+            timePicker.setTime(hour, minute)
 
             timePicker.setOnTimeChangedListener({ view, hour, minute ->
                 onTimeSelected(hour, minute)
@@ -29,4 +30,15 @@ fun TimePicker(
             timePicker
         }
     )
+}
+
+fun TimePicker.setTime(hour: Int, minute: Int){
+    val timePicker = this
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        timePicker.hour = hour
+        timePicker.minute = minute
+    } else {
+        timePicker.setCurrentHour(hour)
+        timePicker.setCurrentMinute(minute)
+    }
 }

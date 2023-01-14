@@ -17,7 +17,7 @@ fun StartScreen(onStart: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TimePicker({ h,m ->
+        TimePicker(onTimeSelected = { h,m ->
             Log.d("TimePicker ", "" + h + " " + m)
         })
         Button(
