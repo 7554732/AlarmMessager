@@ -17,8 +17,13 @@ fun StartScreen(onStart: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(text = "Time to Alarm")
         TimePicker(onTimeSelected = { h,m ->
             Log.d("TimePicker ", "" + h + " " + m)
+        })
+        Text(text = "Time from Alarm to Message")
+        NumberPicker(onSelected = { v ->
+            Log.d("NumberPicker ", "" + v)
         })
         Button(
             onClick = onStart
