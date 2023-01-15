@@ -11,12 +11,13 @@ import com.fomichev.alarmmessager.databinding.TimePickerBinding
 
 @Composable
 fun TimePicker(
+    modifier: Modifier = Modifier,
     hour: Int = 0,
     minute: Int = 30,
     onTimeSelected: (hour: Int, minute: Int) -> Unit
 ) {
     AndroidView(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         factory = { context ->
             val timePicker = TimePickerBinding.inflate(LayoutInflater.from(context)).timePicker
 
