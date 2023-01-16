@@ -3,4 +3,5 @@
     <string name="time_to_alarm">Time to Alarm</string>
     <string name="time_to_msg">Time from Alarm to Message</string>
     <string name="start">Start</string>
+    <string name="stop">Stop</string>
 </resources>
