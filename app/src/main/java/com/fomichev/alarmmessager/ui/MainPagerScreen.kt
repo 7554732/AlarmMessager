@@ -68,11 +68,3 @@ fun MainPagerScreen(onStart: () -> Unit) {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AlarmMessagerTheme {
-        MainPagerScreen({})
-    }
-}
