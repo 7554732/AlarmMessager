@@ -4,4 +4,7 @@
     <string name="time_to_msg">Time from Alarm to Message</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+    <string name="entr_msg">Enter Message text</string>
+    <string name="phone">Phone number</string>
+    <string name="save">Save</string>
 </resources>

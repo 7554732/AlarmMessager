@@ -2,15 +2,14 @@ package com.fomichev.alarmmessager.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
@@ -18,9 +17,10 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.fomichev.alarmmessager.R
 
 @Composable
-fun ConfigScreen() {
+fun ConfigScreen(onSave: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -32,9 +32,30 @@ fun ConfigScreen() {
             mask = "+7-000-000-00-00",
             maskNumber = '0',
             onPhoneChanged = { phoneNumber = it })
-        
-        Spacer(modifier = Modifier.padding(8.dp))
+
+        MsgTextField(
+            Modifier
+                .padding(16.dp)
+                .height(150.dp)
+        )
+
+        Button(onClick = onSave) {
+            Text(stringResource(R.string.save))
+        }
     }
+}
+
+@Composable
+fun MsgTextField(
+    modifier: Modifier = Modifier,
+    msg: MutableState<String> = rememberSaveable { mutableStateOf("") },
+) {
+    TextField(
+        value = msg.value,
+        onValueChange = { msg.value = it },
+        label = { Text(stringResource(R.string.entr_msg)) },
+        modifier = modifier.fillMaxWidth(),
+    )
 }
 
 @Composable
@@ -51,7 +72,7 @@ fun PhoneField(
             onPhoneChanged(it.take(mask.count { it == maskNumber }))
         },
         label = {
-            Text(text = "Phone number")
+            Text(text = stringResource(R.string.phone))
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         visualTransformation = PhoneVisualTransformation(mask, maskNumber),
