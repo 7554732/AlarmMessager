@@ -63,7 +63,7 @@ fun MainPagerScreen(onStart: () -> Unit) {
         ) { index ->
             when(index) {
                 0 -> StartScreen(onStart)
-                1 -> ConfigScreen()
+                1 -> ConfigScreen({})
             }
         }
     }
