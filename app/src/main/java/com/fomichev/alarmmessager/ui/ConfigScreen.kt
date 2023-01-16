@@ -26,30 +26,14 @@ fun ConfigScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LoginScreen()
-    }
-}
-
-@Composable
-fun LoginScreen() {
-    var phoneNumber by rememberSaveable { mutableStateOf("") }
-    Column {
+        var phoneNumber by rememberSaveable { mutableStateOf("") }
         PhoneField(phoneNumber,
-            mask = "000 000 00 00",
-            maskNumber = '0',
-            onPhoneChanged = { phoneNumber = it })
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        PhoneField(phoneNumber,
-            mask = "(000) 000 00 00",
-            maskNumber = '0',
-            onPhoneChanged = { phoneNumber = it })
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        PhoneField(phoneNumber,
+            modifier = Modifier.padding(16.dp),
             mask = "+7-000-000-00-00",
             maskNumber = '0',
             onPhoneChanged = { phoneNumber = it })
+        
+        Spacer(modifier = Modifier.padding(8.dp))
     }
 }
 
