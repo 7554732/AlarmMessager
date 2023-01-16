@@ -12,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -22,6 +21,8 @@ import com.fomichev.alarmmessager.R
 
 @Composable
 fun StartScreen(onStart: () -> Unit) {
+    val isStartedState: MutableState<Boolean> = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -57,7 +58,13 @@ fun StartScreen(onStart: () -> Unit) {
                 })
             }
         }
-        CircleStartButton(onStart = {})
+        CircleStartButton(onStart = {}, isStartedState = isStartedState)
+        Text(
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp),
+            text = "isStarted " + isStartedState.value,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
