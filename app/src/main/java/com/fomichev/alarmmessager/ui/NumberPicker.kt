@@ -24,6 +24,7 @@ fun NumberPicker(
                     }
                     minValue = min
                     maxValue = max
+                    setValue(value)
                 }
         }
     )
