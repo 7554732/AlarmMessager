@@ -7,9 +7,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,10 +17,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fomichev.alarmmessager.R
+import com.fomichev.alarmmessager.domain.AlarmCFG
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
-fun StartScreen(onStart: () -> Unit) {
-    val isStartedState: MutableState<Boolean> = remember { mutableStateOf(false) }
+fun StartScreen(
+    alarmCfg: AlarmCFG,
+    onStart: (AlarmCFG) -> Unit
+) {
+    var timeToAlarm by rememberSaveable { mutableStateOf(alarmCfg.timeToAlarm) }
+    var timeToMsg by rememberSaveable { mutableStateOf(alarmCfg.timeToMsg) }
+    var isStarted by rememberSaveable { mutableStateOf(alarmCfg.isStarted) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -40,8 +47,10 @@ fun StartScreen(onStart: () -> Unit) {
                 TimePicker(
                     modifier = Modifier.padding(16.dp),
                     onTimeSelected = { h,m ->
-                    Log.d("TimePicker ", "" + h + " " + m)
-                })
+                        timeToAlarm = h * 60 + m
+                        Log.d("TimePicker ", "" + h + " " + m)
+                    }
+                )
             }
             Column(
                 modifier = Modifier.weight(0.5F),
@@ -54,15 +63,23 @@ fun StartScreen(onStart: () -> Unit) {
                 NumberPicker(
                     modifier = Modifier.padding(16.dp),
                     onSelected = { v ->
-                    Log.d("NumberPicker ", "" + v)
-                })
+                        timeToMsg = v
+                        Log.d("NumberPicker ", "" + v)
+                    }
+                )
             }
         }
-        CircleStartButton(onStart = {}, isStartedState = isStartedState)
+        CircleStartButton(
+            isStarted = isStarted,
+            onStart = {
+                isStarted = it
+                onStart(AlarmCFG(timeToAlarm, timeToMsg, isStarted))
+            }
+        )
         Text(
             modifier = Modifier.fillMaxWidth()
                 .padding(16.dp),
-            text = "isStarted " + isStartedState.value,
+            text = "isStarted " + isStarted,
             textAlign = TextAlign.Center
         )
     }
@@ -72,7 +89,7 @@ fun StartScreen(onStart: () -> Unit) {
 @Composable
 fun CircleStartButton(
     modifier: Modifier = Modifier,
-    isStartedState: MutableState<Boolean> = remember { mutableStateOf(false) },
+    isStarted: Boolean = false,
     onStart: (Boolean) -> Unit
 ){
     Button(
@@ -80,12 +97,11 @@ fun CircleStartButton(
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
         onClick = {
-            isStartedState.value = !isStartedState.value
-            onStart(isStartedState.value)
+            onStart(!isStarted)
         }
     ) {
         Text(
-            text = if(!isStartedState.value)
+            text = if(!isStarted)
                 stringResource(R.string.start)
             else
                 stringResource(R.string.stop) ,
