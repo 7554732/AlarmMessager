@@ -1,33 +1,25 @@
 package com.fomichev.alarmmessager.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.fomichev.alarmmessager.domain.Msg
-import com.fomichev.alarmmessager.ui.theme.AlarmMessagerTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
-
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainPagerScreen(
-    onStart: () -> Unit,
-    onConfigSave: (Msg) -> Unit
+    viewModel: AlarmMessagerViewModel = viewModel()
 ) {
     val tabData = listOf(
         "START" to Icons.Filled.Home,
@@ -66,8 +58,8 @@ fun MainPagerScreen(
             state = pagerState,
         ) { index ->
             when(index) {
-                0 -> StartScreen(onStart)
-                1 -> ConfigScreen({onConfigSave(it)})
+                0 -> StartScreen(viewModel.alarmCfg, { viewModel.onStart(it) })
+                1 -> ConfigScreen(viewModel.msg, { viewModel.onMsgSave(it) })
             }
         }
     }

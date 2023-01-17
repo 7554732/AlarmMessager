@@ -28,12 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainPagerScreen (
-                        onStart = {startAlarm()},
-                        onConfigSave = { msg ->
-                            Log.d("MainActivity ", "" + msg)
-                        }
-                    )
+                    MainPagerScreen()
                 }
             }
         }
