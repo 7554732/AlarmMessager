@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.fomichev.alarmmessager.domain.Msg
 import com.fomichev.alarmmessager.ui.theme.AlarmMessagerTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -24,7 +25,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun MainPagerScreen(onStart: () -> Unit) {
+fun MainPagerScreen(
+    onStart: () -> Unit,
+    onConfigSave: (Msg) -> Unit
+) {
     val tabData = listOf(
         "START" to Icons.Filled.Home,
         "CONFIG" to Icons.Filled.Settings,
@@ -63,7 +67,7 @@ fun MainPagerScreen(onStart: () -> Unit) {
         ) { index ->
             when(index) {
                 0 -> StartScreen(onStart)
-                1 -> ConfigScreen({})
+                1 -> ConfigScreen({onConfigSave(it)})
             }
         }
     }

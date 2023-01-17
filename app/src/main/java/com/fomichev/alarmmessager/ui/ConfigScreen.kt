@@ -18,9 +18,10 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.fomichev.alarmmessager.R
+import com.fomichev.alarmmessager.domain.Msg
 
 @Composable
-fun ConfigScreen(onSave: () -> Unit) {
+fun ConfigScreen(onSave: (Msg) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -42,7 +43,7 @@ fun ConfigScreen(onSave: () -> Unit) {
             onMsgChanged = { msg = it }
         )
 
-        Button(onClick = onSave) {
+        Button(onClick = { onSave(Msg(phoneNumber, msg)) }) {
             Text(stringResource(R.string.save))
         }
     }
