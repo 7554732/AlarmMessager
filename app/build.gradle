@@ -32,6 +32,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    // fix Inheritance from an interface with '@JvmDefault' members is only allowed with -Xjvm-default option
         freeCompilerArgs += [
                 '-Xjvm-default=enable'
         ]
@@ -67,4 +68,6 @@ dependencies {
 
     implementation 'com.google.accompanist:accompanist-pager:0.15.0'
     implementation 'com.google.accompanist:accompanist-pager-indicators:0.15.0'
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 }
