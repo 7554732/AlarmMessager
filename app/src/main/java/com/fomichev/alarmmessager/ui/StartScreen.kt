@@ -46,9 +46,10 @@ fun StartScreen(
                 )
                 TimePicker(
                     modifier = Modifier.padding(16.dp),
+                    hour =  timeToAlarm / 60,
+                    minute = timeToAlarm % 60,
                     onTimeSelected = { h,m ->
                         timeToAlarm = h * 60 + m
-                        Log.d("TimePicker ", "" + h + " " + m)
                     }
                 )
             }
@@ -62,9 +63,9 @@ fun StartScreen(
                 )
                 NumberPicker(
                     modifier = Modifier.padding(16.dp),
+                    value = timeToMsg,
                     onSelected = { v ->
                         timeToMsg = v
-                        Log.d("NumberPicker ", "" + v)
                     }
                 )
             }
