@@ -33,10 +33,13 @@ fun ConfigScreen(onSave: () -> Unit) {
             maskNumber = '0',
             onPhoneChanged = { phoneNumber = it })
 
+        var msg by rememberSaveable { mutableStateOf("") }
         MsgTextField(
+            msg,
             Modifier
                 .padding(16.dp)
-                .height(150.dp)
+                .height(150.dp),
+            onMsgChanged = { msg = it }
         )
 
         Button(onClick = onSave) {
@@ -47,12 +50,13 @@ fun ConfigScreen(onSave: () -> Unit) {
 
 @Composable
 fun MsgTextField(
+    msg: String,
     modifier: Modifier = Modifier,
-    msg: MutableState<String> = rememberSaveable { mutableStateOf("") },
+    onMsgChanged: (String) -> Unit
 ) {
     TextField(
-        value = msg.value,
-        onValueChange = { msg.value = it },
+        value = msg,
+        onValueChange = { onMsgChanged(it) },
         label = { Text(stringResource(R.string.entr_msg)) },
         modifier = modifier.fillMaxWidth(),
     )
