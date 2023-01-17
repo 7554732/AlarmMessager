@@ -21,29 +21,32 @@ import com.fomichev.alarmmessager.R
 import com.fomichev.alarmmessager.domain.Msg
 
 @Composable
-fun ConfigScreen(onSave: (Msg) -> Unit) {
+fun ConfigScreen(
+    msg: Msg,
+    onSave: (Msg) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var phoneNumber by rememberSaveable { mutableStateOf("") }
+        var phoneNumber by rememberSaveable { mutableStateOf(msg.phoneNumber) }
         PhoneField(phoneNumber,
             modifier = Modifier.padding(16.dp),
             mask = "+7-000-000-00-00",
             maskNumber = '0',
             onPhoneChanged = { phoneNumber = it })
 
-        var msg by rememberSaveable { mutableStateOf("") }
+        var msgText by rememberSaveable { mutableStateOf(msg.text) }
         MsgTextField(
-            msg,
+            msgText,
             Modifier
                 .padding(16.dp)
                 .height(150.dp),
-            onMsgChanged = { msg = it }
+            onMsgChanged = { msgText = it }
         )
 
-        Button(onClick = { onSave(Msg(phoneNumber, msg)) }) {
+        Button(onClick = { onSave(Msg(phoneNumber, msgText)) }) {
             Text(stringResource(R.string.save))
         }
     }
