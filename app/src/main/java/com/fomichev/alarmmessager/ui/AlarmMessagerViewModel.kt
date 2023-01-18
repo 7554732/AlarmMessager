@@ -15,6 +15,10 @@ class AlarmMessagerViewModel @Inject constructor(val alarmStarter: AlarmStarter)
 
     fun onStart(_alarmCfg: AlarmCFG) {
         alarmCfg = _alarmCfg
+        if(alarmCfg.isStarted)
+            alarmStarter.startAlarm(alarmCfg)
+        else
+            alarmStarter.stopAlarm()
         Log.d("AlarmMessagerViewModel ", " " + alarmCfg)
     }
 
