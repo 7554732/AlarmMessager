@@ -2,10 +2,14 @@ package com.fomichev.alarmmessager.ui
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.fomichev.alarmmessager.AlarmStarter
 import com.fomichev.alarmmessager.domain.AlarmCFG
 import com.fomichev.alarmmessager.domain.Msg
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AlarmMessagerViewModel: ViewModel() {
+@HiltViewModel
+class AlarmMessagerViewModel @Inject constructor(val alarmStarter: AlarmStarter) : ViewModel() {
     var alarmCfg = AlarmCFG()
     var msg = Msg()
 

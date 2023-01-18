@@ -14,11 +14,10 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.fomichev.alarmmessager.ui.MainPagerScreen
 import com.fomichev.alarmmessager.ui.theme.AlarmMessagerTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val PENDING_INTENT_FLAG_IMMUTABLE =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +33,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun startAlarm() {
-        val intent = Intent(this, AlarmReceiver::class.java)
-        intent.putExtra("time", 100L)
-        val pIntent = PendingIntent.getBroadcast(this, 0, intent, PENDING_INTENT_FLAG_IMMUTABLE)
-        val am = getSystemService(ALARM_SERVICE) as AlarmManager
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 4000, pIntent)
-    }
 }
