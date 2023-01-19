@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import com.fomichev.alarmmessager.ui.MainPagerScreen
 import com.fomichev.alarmmessager.ui.theme.AlarmMessagerTheme
@@ -45,11 +46,10 @@ class MainActivity : ComponentActivity() {
                 preferences[EXAMPLE_COUNTER] ?: 0
             }
 
-        lifecycleScope.launch{
-            incrementCounter()
-            val exampleData = dataStore.data.first()
-            Log.d("exampleData ", "" + exampleData)
-        }
+        exampleCounterFlow.asLiveData().observe(this, {
+            Log.d("exampleCounterFlow ", "" + it)
+        })
+
     }
 
     suspend fun incrementCounter() {
