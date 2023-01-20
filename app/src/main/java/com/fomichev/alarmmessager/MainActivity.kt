@@ -22,12 +22,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 
-val Context.dataStore by preferencesDataStore(name = "settings")
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    val EXAMPLE_COUNTER = intPreferencesKey("example_counter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -39,23 +36,6 @@ class MainActivity : ComponentActivity() {
                     MainPagerScreen()
                 }
             }
-        }
-        val exampleCounterFlow: Flow<Int> = dataStore.data
-            .map { preferences ->
-                // No type safety.
-                preferences[EXAMPLE_COUNTER] ?: 0
-            }
-
-        exampleCounterFlow.asLiveData().observe(this, {
-            Log.d("exampleCounterFlow ", "" + it)
-        })
-
-    }
-
-    suspend fun incrementCounter() {
-        dataStore.edit { settings ->
-            val currentCounterValue = settings[EXAMPLE_COUNTER] ?: 0
-            settings[EXAMPLE_COUNTER] = currentCounterValue + 1
         }
     }
 }
