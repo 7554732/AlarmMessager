@@ -10,7 +10,9 @@ import com.fomichev.alarmmessager.domain.Msg
 import com.fomichev.alarmmessager.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,32 +21,24 @@ class AlarmMessagerViewModel @Inject constructor(
         val settingsRepository: SettingsRepository
     ) : ViewModel() {
 
-    var alarmCfg = AlarmCFG()
-    var msg = Msg()
+    val alarmCfg get() = runBlocking { settingsRepository.alarmCfgFlow.first() }
+    val msg get() = runBlocking { settingsRepository.msgFlow.first() }
 
-    val settings = settingsRepository.exampleCounterFlow
-
-    init {
-        viewModelScope.launch {
-            settings.collectLatest {
-                Log.d("exampleCounterFlow ", "" + it)
-            }
-        }
-    }
     fun onStart(_alarmCfg: AlarmCFG) {
         viewModelScope.launch {
-            settingsRepository.incrementCounter()
+            settingsRepository.saveAlarmCFG(_alarmCfg)
         }
-        alarmCfg = _alarmCfg
-        if(alarmCfg.isStarted)
-            alarmStarter.startAlarm(alarmCfg)
+        if(_alarmCfg.isStarted)
+            alarmStarter.startAlarm(_alarmCfg)
         else
             alarmStarter.stopAlarm()
-        Log.d("AlarmMessagerViewModel ", " " + alarmCfg)
+        Log.d("AlarmMessagerViewModel ", " " + _alarmCfg)
     }
 
     fun onMsgSave(_msg: Msg) {
-        msg = _msg
-        Log.d("AlarmMessagerViewModel ", " " + msg)
+        viewModelScope.launch {
+            settingsRepository.saveMsg(_msg)
+        }
+        Log.d("AlarmMessagerViewModel ", " " + _msg)
     }
 }
