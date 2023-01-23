@@ -6,8 +6,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.asLiveData
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -53,11 +56,14 @@ fun MainPagerScreen(
                 })
             }
         }
+
+        val alarmCfg by viewModel.alarmFlow.asLiveData().observeAsState()
+
         HorizontalPager(
             state = pagerState,
         ) { index ->
             when(index) {
-                0 -> StartScreen(viewModel.alarmCfg, { viewModel.onStart(it) })
+                0 -> StartScreen(alarmCfg, viewModel.alarmCfgInit, { viewModel.onStart(it) })
                 1 -> ConfigScreen(viewModel.msg, { viewModel.onMsgSave(it) })
             }
         }
