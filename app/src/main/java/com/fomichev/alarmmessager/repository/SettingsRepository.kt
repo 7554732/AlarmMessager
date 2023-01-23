@@ -56,4 +56,11 @@ class SettingsRepository @Inject constructor(@ApplicationContext val context: Co
             preferences[IS_STARTED] = cfg.isStarted
         }
     }
+
+    suspend fun setStarted(isStarted: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[IS_STARTED] = isStarted
+        }
+
+    }
 }
