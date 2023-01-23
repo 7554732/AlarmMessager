@@ -23,13 +23,26 @@ import androidx.compose.runtime.setValue
 
 @Composable
 fun StartScreen(
-    alarmCfg: AlarmCFG,
+    alarmCfg: AlarmCFG?,
+    alarmCfgInit: AlarmCFG,
     onStart: (AlarmCFG) -> Unit
 ) {
-    var timeToAlarm by rememberSaveable { mutableStateOf(alarmCfg.timeToAlarm) }
-    var timeToMsg by rememberSaveable { mutableStateOf(alarmCfg.timeToMsg) }
-    var isStarted by rememberSaveable { mutableStateOf(alarmCfg.isStarted) }
+    var timeToAlarm by rememberSaveable { mutableStateOf(alarmCfgInit.timeToAlarm) }
+    var timeToMsg by rememberSaveable { mutableStateOf(alarmCfgInit.timeToMsg) }
+    var isStarted by rememberSaveable { mutableStateOf(alarmCfgInit.isStarted) }
 
+//    update states when alarmCfg change
+    var isInit by rememberSaveable(
+        inputs = arrayOf(alarmCfg),
+        init = {
+            alarmCfg?.let {
+                timeToAlarm = it.timeToAlarm
+                timeToMsg = it.timeToMsg
+                isStarted = it.isStarted
+            }
+            mutableStateOf(true)
+        }
+    )
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
