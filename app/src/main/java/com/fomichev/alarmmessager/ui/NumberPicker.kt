@@ -24,8 +24,10 @@ fun NumberPicker(
                     }
                     minValue = min
                     maxValue = max
-                    setValue(value)
                 }
+        },
+        update = {
+            it.setValue(value)
         }
     )
 }
