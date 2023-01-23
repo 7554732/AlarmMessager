@@ -22,13 +22,15 @@ fun TimePicker(
             val timePicker = TimePickerBinding.inflate(LayoutInflater.from(context)).timePicker
 
             timePicker.setIs24HourView(true)
-            timePicker.setTime(hour, minute)
 
             timePicker.setOnTimeChangedListener({ view, hour, minute ->
                 onTimeSelected(hour, minute)
             })
 
             timePicker
+        },
+        update = {
+            it.setTime(hour, minute)
         }
     )
 }
