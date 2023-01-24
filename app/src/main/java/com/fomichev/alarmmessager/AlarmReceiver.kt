@@ -27,7 +27,7 @@ class AlarmReceiver: BroadcastReceiver() {
         scope.launch(Dispatchers.Default) {
             try {
                 settingsRepository.setStarted(false)
-                Log.d("AlarmReceiver", "onReceive")
+                Log.d("AlarmReceiver", "onReceive" + intent?.getStringExtra("aim"))
             } finally {
                 pendingResult.finish()
             }
