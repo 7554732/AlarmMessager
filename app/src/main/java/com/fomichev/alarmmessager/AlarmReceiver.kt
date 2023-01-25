@@ -69,7 +69,13 @@ class AlarmReceiver: BroadcastReceiver() {
     fun sendSMS(context: Context?, phoneNumber: String, msg: String) {
         if(context == null) return
         try {
-            val smsManager = SmsManager.getDefault()
+            val smsManager: SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                context.getSystemService(
+                    SmsManager::class.java
+                )
+            } else {
+                SmsManager.getDefault()
+            }
             val parts: ArrayList<String> = smsManager.divideMessage(msg)
             smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null)
         } catch (ex: Exception) {
