@@ -1,10 +1,11 @@
 package com.fomichev.alarmmessager
 
-import android.R
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import android.os.Build
+import android.telephony.SmsManager
 import android.util.Log
 import com.fomichev.alarmmessager.AlarmStarter.Companion.ALARM
 import com.fomichev.alarmmessager.AlarmStarter.Companion.MSG
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,7 +35,14 @@ class AlarmReceiver: BroadcastReceiver() {
                 val aim = intent?.getStringExtra("aim")
                 when (aim){
                     ALARM -> playSound(context, "alarm")
-                    MSG -> settingsRepository.setStarted(false)
+                    MSG -> {
+                        val cfg = settingsRepository.alarmCfgFlow.first()
+                        val msg = settingsRepository.msgFlow.first()
+                        if(cfg.isStarted){
+                            sendSMS(context, msg.phoneNumber, msg.text)
+                            settingsRepository.setStarted(false)
+                        }
+                    }
                 }
                 Log.d("AlarmReceiver", "onReceive" + aim)
             } finally {
@@ -55,5 +64,16 @@ class AlarmReceiver: BroadcastReceiver() {
             mp!!.release()
         }
         mp.start()
+    }
+
+    fun sendSMS(context: Context?, phoneNumber: String, msg: String) {
+        if(context == null) return
+        try {
+            val smsManager = SmsManager.getDefault()
+            val parts: ArrayList<String> = smsManager.divideMessage(msg)
+            smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 }
