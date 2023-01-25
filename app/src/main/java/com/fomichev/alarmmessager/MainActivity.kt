@@ -1,5 +1,6 @@
 package com.fomichev.alarmmessager
 
+import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        PermissionGetter(this).requestPermission(Manifest.permission.SEND_SMS)
         setContent {
             AlarmMessagerTheme {
                 Surface(
