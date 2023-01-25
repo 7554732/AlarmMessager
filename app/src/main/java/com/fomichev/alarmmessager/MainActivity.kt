@@ -28,7 +28,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PermissionGetter(this).requestPermission(Manifest.permission.SEND_SMS)
+        PermissionGetter(this,
+            { isGranted: Boolean ->
+                if (isGranted) {
+                    Log.i("Permission: ", "Granted")
+                } else {
+                    Log.i("Permission: ", "Denied")
+                }
+            }
+        ).requestPermission(Manifest.permission.SEND_SMS)
         setContent {
             AlarmMessagerTheme {
                 Surface(
