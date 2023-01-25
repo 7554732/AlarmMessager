@@ -20,6 +20,7 @@ class SettingsRepository @Inject constructor(@ApplicationContext val context: Co
 
     val IS_STARTED = booleanPreferencesKey("is_started")
     val TIME_TO_ALARM = intPreferencesKey("time_to_alarm")
+    val START_TIME = longPreferencesKey("start_time")
     val TIME_TO_MSG = intPreferencesKey("time_to_msg")
 
     val alarmCfgFlow: Flow<AlarmCFG> = context.dataStore.data
@@ -27,6 +28,7 @@ class SettingsRepository @Inject constructor(@ApplicationContext val context: Co
             AlarmCFG(
                 preferences[TIME_TO_ALARM] ?: 30,
                 preferences[TIME_TO_MSG] ?: 10,
+                preferences[START_TIME] ?: 0L,
                 preferences[IS_STARTED] ?: false
             )
         }
@@ -53,6 +55,7 @@ class SettingsRepository @Inject constructor(@ApplicationContext val context: Co
         context.dataStore.edit { preferences ->
             preferences[TIME_TO_ALARM] = cfg.timeToAlarm
             preferences[TIME_TO_MSG] = cfg.timeToMsg
+            preferences[START_TIME] = cfg.startTime
             preferences[IS_STARTED] = cfg.isStarted
         }
     }
@@ -61,6 +64,5 @@ class SettingsRepository @Inject constructor(@ApplicationContext val context: Co
         context.dataStore.edit { preferences ->
             preferences[IS_STARTED] = isStarted
         }
-
     }
 }

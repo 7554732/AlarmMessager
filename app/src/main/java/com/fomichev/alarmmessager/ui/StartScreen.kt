@@ -20,6 +20,8 @@ import com.fomichev.alarmmessager.R
 import com.fomichev.alarmmessager.domain.AlarmCFG
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun StartScreen(
@@ -29,6 +31,7 @@ fun StartScreen(
 ) {
     var timeToAlarm by rememberSaveable { mutableStateOf(alarmCfgInit.timeToAlarm) }
     var timeToMsg by rememberSaveable { mutableStateOf(alarmCfgInit.timeToMsg) }
+    var startTime by rememberSaveable { mutableStateOf(alarmCfgInit.startTime) }
     var isStarted by rememberSaveable { mutableStateOf(alarmCfgInit.isStarted) }
 
 //    update states when alarmCfg change
@@ -38,6 +41,7 @@ fun StartScreen(
             alarmCfg?.let {
                 timeToAlarm = it.timeToAlarm
                 timeToMsg = it.timeToMsg
+                startTime = it.startTime
                 isStarted = it.isStarted
             }
             mutableStateOf(true)
@@ -87,18 +91,25 @@ fun StartScreen(
             isStarted = isStarted,
             onStart = {
                 isStarted = it
-                onStart(AlarmCFG(timeToAlarm, timeToMsg, isStarted))
+                onStart(AlarmCFG(timeToAlarm, timeToMsg, System.currentTimeMillis(), isStarted))
             }
         )
         Text(
             modifier = Modifier.fillMaxWidth()
                 .padding(16.dp),
-            text = "isStarted " + isStarted,
+            text = if(isStarted) "" + timeToString(startTime + (timeToAlarm + timeToMsg) * 1000 * 60) else "",
             textAlign = TextAlign.Center
         )
     }
 }
 
+private fun timeToString(time: Long): String? {
+    val date = Date(time)
+    val dateFormat = SimpleDateFormat("y-M-d H:m:s")
+    val resString = dateFormat.format(date)
+    dateFormat.format(date)
+    return resString
+}
 
 @Composable
 fun CircleStartButton(

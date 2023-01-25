@@ -33,12 +33,12 @@ class AlarmStarter @Inject constructor(@ApplicationContext val appContext: Conte
     fun startAlarm(alarmCfg: AlarmCFG) {
         am.set(
             AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + alarmCfg.timeToAlarm * 1000 * 60,
+            alarmCfg.startTime + alarmCfg.timeToAlarm * 1000 * 60,
             alarmPendingIntent
         )
         am.set(
             AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + (alarmCfg.timeToAlarm + alarmCfg.timeToMsg) * 1000 * 60,
+            alarmCfg.startTime + (alarmCfg.timeToAlarm + alarmCfg.timeToMsg) * 1000 * 60,
             msgPendingIntent
         )
     }
