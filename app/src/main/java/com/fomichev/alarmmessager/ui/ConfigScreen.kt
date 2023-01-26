@@ -26,7 +26,7 @@ fun ConfigScreen(
         var phoneNumber by rememberSaveable { mutableStateOf(msg.phoneNumber) }
         PhoneField(phoneNumber,
             modifier = Modifier.padding(16.dp),
-            mask = "+7-000-000-00-00",
+            mask = "+0-000-000-00-00",
             maskNumber = '0',
             onPhoneChanged = { phoneNumber = it })
 
