@@ -3,7 +3,7 @@ package com.fomichev.alarmmessager.ui
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fomichev.alarmmessager.AlarmStarter
+import com.fomichev.alarmmessager.TimerStarter
 import com.fomichev.alarmmessager.domain.AlarmCFG
 import com.fomichev.alarmmessager.domain.Msg
 import com.fomichev.alarmmessager.repository.SettingsRepository
@@ -15,9 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlarmMessagerViewModel @Inject constructor(
-        val alarmStarter: AlarmStarter,
-        val settingsRepository: SettingsRepository
-    ) : ViewModel() {
+    val timerStarter: TimerStarter,
+    val settingsRepository: SettingsRepository
+) : ViewModel() {
 
     val alarmCfgInit get() = runBlocking { settingsRepository.alarmCfgFlow.first() }
     val msg get() = runBlocking { settingsRepository.msgFlow.first() }
@@ -29,9 +29,9 @@ class AlarmMessagerViewModel @Inject constructor(
             settingsRepository.saveAlarmCFG(_alarmCfg)
         }
         if(_alarmCfg.isStarted)
-            alarmStarter.startAlarm(_alarmCfg)
+            timerStarter.startAlarm(_alarmCfg)
         else
-            alarmStarter.stopAlarm()
+            timerStarter.stopAlarm()
         Log.d("AlarmMessagerViewModel ", " " + _alarmCfg)
     }
 

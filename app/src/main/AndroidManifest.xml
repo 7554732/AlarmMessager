@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:name=".AlarmMessagerApplication"
@@ -33,6 +34,10 @@
         <receiver android:name=".AlarmReceiver"
             android:exported="true">
         </receiver>
+        <service
+            android:name=".TimerService"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>
