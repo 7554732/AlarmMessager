@@ -1,0 +1,59 @@
+package com.fomichev.alarmmessager
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.telephony.SmsManager
+import android.util.Log
+import com.fomichev.alarmmessager.repository.SettingsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
+
+class MsgReceiver:  BroadcastReceiver() {
+
+    private val scope = CoroutineScope(SupervisorJob())
+
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val pendingResult: PendingResult = goAsync()
+
+        scope.launch(Dispatchers.Default) {
+            try {
+                val cfg = settingsRepository.alarmCfgFlow.first()
+                val msg = settingsRepository.msgFlow.first()
+                if(cfg.isStarted){
+                    sendSMS(context, msg.phoneNumber, msg.text)
+                    settingsRepository.setStarted(false)
+                }
+                Timber.d("MsgReceiver onReceive")
+            } finally {
+                pendingResult.finish()
+            }
+        }
+    }
+
+    fun sendSMS(context: Context?, phoneNumber: String, msg: String) {
+        if(context == null) return
+        try {
+            val smsManager: SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                context.getSystemService(
+                    SmsManager::class.java
+                )
+            } else {
+                SmsManager.getDefault()
+            }
+            val parts: ArrayList<String> = smsManager.divideMessage(msg)
+            smsManager.sendMultipartTextMessage("+" + phoneNumber, null, parts, null, null)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+}

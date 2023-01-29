@@ -112,10 +112,8 @@ class TimerService: Service() {
     }
 
     private fun sendIntent() {
-        val alarmIntent = Intent(this, cls).putExtra("aim",
-            AlarmStarter.ALARM
-        )
-        sendBroadcast(alarmIntent)
+        val intent = Intent(this, cls)
+        sendBroadcast(intent)
     }
 
     private fun startCircleTimerUpdater() {
