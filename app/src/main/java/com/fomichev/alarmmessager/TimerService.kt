@@ -15,9 +15,11 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import timber.log.Timber
 
+
 class TimerService: Service() {
     companion object {
         val TIME_TO_END = "time_to_end"
+        val CLASS_NAME = "class_name"
         val UPDATE_TIME: Long = 1000L
     }
 
@@ -31,12 +33,18 @@ class TimerService: Service() {
     val timeToEnd: LiveData<Long>
         get() = _timeToEnd
 
+    private lateinit var cls: Class<*>
+
     private val NOTIFICATION_CHANNEL_ID = "Timer_Service_Channel"
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) return START_NOT_STICKY
 
         _timeToEnd.value = intent.getLongExtra(TIME_TO_END, 0L)
+
+        cls = Class.forName(
+            intent.getStringExtra(CLASS_NAME)
+        )
 
         //  restart countdown
         stopCircleTimerUpdater()
@@ -104,7 +112,7 @@ class TimerService: Service() {
     }
 
     private fun sendIntent() {
-        val alarmIntent = Intent(this, AlarmReceiver::class.java).putExtra("aim",
+        val alarmIntent = Intent(this, cls).putExtra("aim",
             AlarmStarter.ALARM
         )
         sendBroadcast(alarmIntent)

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startForegroundService
+import com.fomichev.alarmmessager.TimerService.Companion.CLASS_NAME
 import com.fomichev.alarmmessager.TimerService.Companion.TIME_TO_END
 import com.fomichev.alarmmessager.domain.AlarmCFG
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -17,6 +18,7 @@ class TimerStarter  @Inject constructor(@ApplicationContext val appContext: Cont
 
     fun startAlarm(alarmCfg: AlarmCFG) {
         intent.putExtra(TIME_TO_END, (alarmCfg.timeToAlarm * 1000).toLong() )
+        intent.putExtra(CLASS_NAME, "com.fomichev.alarmmessager.AlarmReceiver" )
         startForegroundService(appContext, intent)
     }
 
