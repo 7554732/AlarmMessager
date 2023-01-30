@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_MIN_IN_HOUR
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_ML_SEC
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_SEC_IN_MIN
+import com.fomichev.alarmmessager.timeToString
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -104,14 +105,6 @@ fun StartScreen(
             textAlign = TextAlign.Center
         )
     }
-}
-
-private fun timeToString(time: Long): String? {
-    val date = Date(time)
-    val dateFormat = SimpleDateFormat("y-M-d H:m:s")
-    val resString = dateFormat.format(date)
-    dateFormat.format(date)
-    return resString
 }
 
 @Composable
