@@ -33,7 +33,10 @@ class AlarmReceiver: BroadcastReceiver() {
 
         scope.launch(Dispatchers.Default) {
             try {
-                playSound(context, "alarm")
+                val cfg = settingsRepository.alarmCfgFlow.first()
+                if(cfg.isStarted) {
+                    playSound(context, "alarm")
+                }
                 Timber.d("AlarmReceiver onReceive")
             } finally {
                 pendingResult.finish()

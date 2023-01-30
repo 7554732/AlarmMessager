@@ -7,6 +7,7 @@ import android.os.Build
 import android.telephony.SmsManager
 import android.util.Log
 import com.fomichev.alarmmessager.repository.SettingsRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MsgReceiver:  BroadcastReceiver() {
 
     private val scope = CoroutineScope(SupervisorJob())
