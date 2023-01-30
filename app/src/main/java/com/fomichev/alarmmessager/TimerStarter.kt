@@ -3,6 +3,8 @@ package com.fomichev.alarmmessager
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat.startForegroundService
+import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_ML_SEC
+import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_SEC_IN_MIN
 import com.fomichev.alarmmessager.TimerService.Companion.CLASS_NAME
 import com.fomichev.alarmmessager.TimerService.Companion.TIME_TO_END
 import com.fomichev.alarmmessager.domain.AlarmCFG
@@ -20,12 +22,12 @@ class TimerStarter  @Inject constructor(@ApplicationContext val appContext: Cont
     fun startAlarm(alarmCfg: AlarmCFG) {
         startTimer(
             "com.fomichev.alarmmessager.AlarmReceiver",
-            (alarmCfg.timeToAlarm * 1000).toLong(),
+            (alarmCfg.timeToAlarm * DIVISOR_SEC_IN_MIN * DIVISOR_ML_SEC).toLong(),
             alarmIntent
         )
         startTimer(
             "com.fomichev.alarmmessager.MsgReceiver",
-            ((alarmCfg.timeToAlarm + alarmCfg.timeToMsg )* 1000).toLong(),
+            ((alarmCfg.timeToAlarm + alarmCfg.timeToMsg ) * DIVISOR_SEC_IN_MIN * DIVISOR_ML_SEC).toLong(),
             msgIntent
         )
     }

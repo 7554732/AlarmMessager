@@ -20,6 +20,9 @@ import com.fomichev.alarmmessager.R
 import com.fomichev.alarmmessager.domain.AlarmCFG
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_MIN_IN_HOUR
+import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_ML_SEC
+import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_SEC_IN_MIN
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,10 +66,10 @@ fun StartScreen(
                 )
                 TimePicker(
                     modifier = Modifier.padding(16.dp),
-                    hour =  timeToAlarm / 60,
-                    minute = timeToAlarm % 60,
+                    hour =  timeToAlarm / DIVISOR_MIN_IN_HOUR,
+                    minute = timeToAlarm % DIVISOR_MIN_IN_HOUR,
                     onTimeSelected = { h,m ->
-                        timeToAlarm = h * 60 + m
+                        timeToAlarm = h * DIVISOR_MIN_IN_HOUR + m
                     }
                 )
             }
@@ -97,7 +100,7 @@ fun StartScreen(
         Text(
             modifier = Modifier.fillMaxWidth()
                 .padding(16.dp),
-            text = if(isStarted) "" + timeToString(startTime + (timeToAlarm + timeToMsg) * 1000 * 60) else "",
+            text = if(isStarted) "" + timeToString(startTime + (timeToAlarm + timeToMsg) * DIVISOR_SEC_IN_MIN * DIVISOR_ML_SEC) else "",
             textAlign = TextAlign.Center
         )
     }
