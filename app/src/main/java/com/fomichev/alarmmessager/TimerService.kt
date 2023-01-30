@@ -2,6 +2,7 @@ package com.fomichev.alarmmessager
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,10 @@ import timber.log.Timber
 
 
 open class TimerService: Service() {
+    val PENDING_INTENT_FLAG_IMMUTABLE =
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
+            PendingIntent.FLAG_IMMUTABLE
+        else 0
     companion object {
         val TIME_TO_END = "time_to_end"
         val CLASS_NAME = "class_name"
@@ -54,18 +59,26 @@ open class TimerService: Service() {
             startCircleTimerUpdater()
         }
 
+        val pendingIntent: PendingIntent =
+            Intent(this, MainActivity::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(this, 0, notificationIntent,
+                    PENDING_INTENT_FLAG_IMMUTABLE)
+            }
+
         createNotificationChannel()
         startForeground(
             1, NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_round))
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(endTime.toString())
+                .setContentTitle(timeToString(endTime))
                 .setContentText("")
                 .setShowWhen(false)
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
                 .setGroup(getString(R.string.app_name))
                 .setGroupSummary(false)
-                .setDefaults(NotificationCompat.DEFAULT_ALL).build()
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentIntent(pendingIntent)
+                .build()
         )
 
         Timber.d(TAG + " onStartCommand " + timeToEnd.value)
