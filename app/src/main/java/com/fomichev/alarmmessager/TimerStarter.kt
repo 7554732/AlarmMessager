@@ -10,10 +10,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+class AlarmTimer: TimerService()
+class MsgTimer: TimerService()
 @Singleton
 class TimerStarter  @Inject constructor(@ApplicationContext val appContext: Context) {
-    val alarmIntent = Intent(appContext, TimerService::class.java)
-    val msgIntent = Intent(appContext, TimerService::class.java)
+    val alarmIntent = Intent(appContext, AlarmTimer::class.java)
+    val msgIntent = Intent(appContext, MsgTimer::class.java)
 
     fun startAlarm(alarmCfg: AlarmCFG) {
         startTimer(
@@ -23,14 +25,14 @@ class TimerStarter  @Inject constructor(@ApplicationContext val appContext: Cont
         )
         startTimer(
             "com.fomichev.alarmmessager.MsgReceiver",
-            (alarmCfg.timeToMsg * 1000).toLong(),
+            ((alarmCfg.timeToAlarm + alarmCfg.timeToMsg )* 1000).toLong(),
             msgIntent
         )
     }
 
     private fun startTimer(cls: String, time_to_end: Long, intent: Intent){
-        alarmIntent.putExtra(TIME_TO_END, cls)
-        alarmIntent.putExtra(CLASS_NAME, time_to_end)
+        intent.putExtra(CLASS_NAME, cls)
+        intent.putExtra(TIME_TO_END, time_to_end)
         startForegroundService(appContext, intent)
     }
 

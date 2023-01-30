@@ -38,7 +38,11 @@
             android:exported="true">
         </receiver>
         <service
-            android:name=".TimerService"
+            android:name=".MsgTimer"
+            android:exported="true">
+        </service>
+        <service
+            android:name=".AlarmTimer"
             android:exported="true">
         </service>
     </application>
