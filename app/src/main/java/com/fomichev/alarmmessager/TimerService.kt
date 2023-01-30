@@ -16,12 +16,13 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 
 
-class TimerService: Service() {
+open class TimerService: Service() {
     companion object {
         val TIME_TO_END = "time_to_end"
         val CLASS_NAME = "class_name"
         val UPDATE_TIME: Long = 1000L
     }
+    val TAG = javaClass.simpleName
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -67,7 +68,7 @@ class TimerService: Service() {
                 .setDefaults(NotificationCompat.DEFAULT_ALL).build()
         )
 
-        Timber.d("onStartCommand TimerService " + timeToEnd.value)
+        Timber.d(TAG + " onStartCommand " + timeToEnd.value)
         return START_NOT_STICKY
     }
 
@@ -83,7 +84,7 @@ class TimerService: Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        Timber.d("onBind TimerService " + timeToEnd.value)
+        Timber.d(TAG + " onBind TimerService " + timeToEnd.value)
         return TimerServiceBinder()
     }
 
@@ -95,7 +96,7 @@ class TimerService: Service() {
     override fun onDestroy() {
         super.onDestroy()
         stopCircleTimerUpdater()
-        Timber.d("TimerService onDestroy")
+        Timber.d(TAG + " onDestroy")
     }
 
     suspend fun runTimerUpdater() {
@@ -105,7 +106,7 @@ class TimerService: Service() {
             withContext(Dispatchers.Main) {
                 _timeToEnd.value = endTime - System.currentTimeMillis()
             }
-            Timber.d("onUpdate " + timeToEnd.value)
+            Timber.d(TAG + " onUpdate " + timeToEnd.value)
         }
         sendIntent()
         stopSelf()
@@ -120,14 +121,14 @@ class TimerService: Service() {
         circleTimerUpdater = scope.launch{
             runTimerUpdater()
         }
-        Timber.d( "CircleTimerUpdater started")
+        Timber.d( TAG + " CircleTimerUpdater started")
     }
 
 
     fun stopCircleTimerUpdater() {
         circleTimerUpdater?.cancel()
         circleTimerUpdater = null
-        Timber.d( "CircleTimerUpdater canceled")
+        Timber.d( TAG + " CircleTimerUpdater canceled")
     }
 
 }
