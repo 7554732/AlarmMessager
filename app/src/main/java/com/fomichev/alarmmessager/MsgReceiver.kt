@@ -23,6 +23,8 @@ class MsgReceiver:  BroadcastReceiver() {
 
     @Inject
     lateinit var settingsRepository: SettingsRepository
+    @Inject
+    lateinit var wakeLock: AlarmWakeLock
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val pendingResult: PendingResult = goAsync()
@@ -33,10 +35,11 @@ class MsgReceiver:  BroadcastReceiver() {
                 val msg = settingsRepository.msgFlow.first()
                 if(cfg.isStarted){
                     sendSMS(context, msg.phoneNumber, msg.text)
-                    settingsRepository.setStarted(false)
                 }
                 Timber.d("MsgReceiver onReceive")
             } finally {
+                wakeLock.setWakeLock(false)
+                settingsRepository.setStarted(false)
                 pendingResult.finish()
             }
         }
