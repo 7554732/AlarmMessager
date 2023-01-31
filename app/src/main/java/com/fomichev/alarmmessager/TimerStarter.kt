@@ -2,6 +2,7 @@ package com.fomichev.alarmmessager
 
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import androidx.core.content.ContextCompat.startForegroundService
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_ML_SEC
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_SEC_IN_MIN
@@ -41,5 +42,20 @@ class TimerStarter  @Inject constructor(@ApplicationContext val appContext: Cont
     fun stopAlarm() {
         appContext.stopService(alarmIntent)
         appContext.stopService(msgIntent)
+    }
+
+    fun bindTimer(connection: ServiceConnection, className: String) {
+        val cls = Class.forName(className)
+        val intent = Intent(appContext, cls)
+        appContext.bindService(intent, connection, 0)
+    }
+
+    fun unbindTimer(connection: ServiceConnection) {
+        try {
+            appContext.unbindService(connection)
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }

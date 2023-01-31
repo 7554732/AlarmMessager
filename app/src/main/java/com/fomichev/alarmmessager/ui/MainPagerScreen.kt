@@ -16,12 +16,11 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainPagerScreen(
-    viewModel: AlarmMessagerViewModel = viewModel()
+    viewModel: AlarmMessagerViewModel
 ) {
     val tabData = listOf(
         "START" to Icons.Filled.Home,
@@ -58,12 +57,13 @@ fun MainPagerScreen(
         }
 
         val alarmCfg by viewModel.alarmFlow.asLiveData().observeAsState()
+        val timeLeftToMsg by viewModel.timeLeftToMsg.observeAsState()
 
         HorizontalPager(
             state = pagerState,
         ) { index ->
             when(index) {
-                0 -> StartScreen(alarmCfg, viewModel.alarmCfgInit, { viewModel.onStart(it) })
+                0 -> StartScreen(alarmCfg, viewModel.alarmCfgInit, timeLeftToMsg, { viewModel.onStart(it) })
                 1 -> ConfigScreen(viewModel.msg, { viewModel.onMsgSave(it) })
             }
         }

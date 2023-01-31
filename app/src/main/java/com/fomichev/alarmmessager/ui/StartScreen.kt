@@ -1,6 +1,5 @@
 package com.fomichev.alarmmessager.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
@@ -16,21 +15,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fomichev.alarmmessager.R
 import com.fomichev.alarmmessager.domain.AlarmCFG
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.fomichev.alarmmessager.*
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_MIN_IN_HOUR
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_ML_SEC
 import com.fomichev.alarmmessager.AlarmMessagerApplication.Companion.DIVISOR_SEC_IN_MIN
-import com.fomichev.alarmmessager.timeToString
-import java.text.SimpleDateFormat
+import com.fomichev.alarmmessager.R
 import java.util.*
 
 @Composable
 fun StartScreen(
     alarmCfg: AlarmCFG?,
     alarmCfgInit: AlarmCFG,
+    timeLeftToMsg: Long?,
     onStart: (AlarmCFG) -> Unit
 ) {
     var timeToAlarm by rememberSaveable { mutableStateOf(alarmCfgInit.timeToAlarm) }
@@ -101,7 +100,17 @@ fun StartScreen(
         Text(
             modifier = Modifier.fillMaxWidth()
                 .padding(16.dp),
-            text = if(isStarted) "" + timeToString(startTime + (timeToAlarm + timeToMsg) * DIVISOR_SEC_IN_MIN * DIVISOR_ML_SEC) else "",
+            text = if(isStarted)
+                    "" + timeToString(
+                        startTime + (timeToAlarm + timeToMsg) * DIVISOR_SEC_IN_MIN * DIVISOR_ML_SEC,
+                        "y-M-d H:m:s"
+                    )
+                    + " " + timeLeftToMsg?.let {
+                        Hours(it).toString() + ":" +
+                        Minutes(it).toString() + ":" +
+                        Seconds(it).toString()
+                    }
+                else "",
             textAlign = TextAlign.Center
         )
     }

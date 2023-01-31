@@ -70,7 +70,7 @@ open class TimerService: Service() {
             1, NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher_round))
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(timeToString(endTime))
+                .setContentTitle(timeToString(endTime, "y-M-d H:m:s"))
                 .setContentText("")
                 .setShowWhen(false)
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
