@@ -56,7 +56,13 @@ class MsgReceiver:  BroadcastReceiver() {
                 SmsManager.getDefault()
             }
             val parts: ArrayList<String> = smsManager.divideMessage(msg)
-            smsManager.sendMultipartTextMessage("+" + phoneNumber, null, parts, null, null)
+            smsManager.sendMultipartTextMessage(
+                "+" + phoneNumber,
+                null,
+                parts,
+                null,
+                null
+            )
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
