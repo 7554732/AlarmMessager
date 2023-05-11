@@ -27,15 +27,14 @@ import java.util.*
 
 @Composable
 fun StartScreen(
-    alarmCfg: AlarmCFG?,
-    alarmCfgInit: AlarmCFG,
+    alarmCfg: AlarmCFG,
     timeLeftToMsg: Long?,
     onStart: (AlarmCFG) -> Unit
 ) {
-    var timeToAlarm by rememberSaveable { mutableStateOf(alarmCfgInit.timeToAlarm) }
-    var timeToMsg by rememberSaveable { mutableStateOf(alarmCfgInit.timeToMsg) }
-    var startTime by rememberSaveable { mutableStateOf(alarmCfgInit.startTime) }
-    var isStarted by rememberSaveable { mutableStateOf(alarmCfgInit.isStarted) }
+    var timeToAlarm by rememberSaveable { mutableStateOf(alarmCfg.timeToAlarm) }
+    var timeToMsg by rememberSaveable { mutableStateOf(alarmCfg.timeToMsg) }
+    var startTime by rememberSaveable { mutableStateOf(alarmCfg.startTime) }
+    var isStarted by rememberSaveable { mutableStateOf(alarmCfg.isStarted) }
 
 //    update states when alarmCfg change
     var isInit by rememberSaveable(

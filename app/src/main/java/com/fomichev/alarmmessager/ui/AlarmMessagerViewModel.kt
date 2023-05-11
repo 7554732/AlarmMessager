@@ -15,7 +15,10 @@ import com.fomichev.alarmmessager.domain.AlarmCFG
 import com.fomichev.alarmmessager.domain.Msg
 import com.fomichev.alarmmessager.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -28,11 +31,15 @@ class AlarmMessagerViewModel @Inject constructor(
     val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    val alarmCfgInit get() = runBlocking { settingsRepository.alarmCfgFlow.first() }
     val msg get() = runBlocking { settingsRepository.msgFlow.first() }
 
-    val alarmFlow = settingsRepository.alarmCfgFlow
-
+    val alarmCFG: StateFlow<AlarmCFG>
+        get() = settingsRepository.alarmCfgFlow
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Lazily,
+                runBlocking { settingsRepository.alarmCfgFlow.first() }
+            )
     fun onStart(_alarmCfg: AlarmCFG) {
         viewModelScope.launch {
             settingsRepository.saveAlarmCFG(_alarmCfg)
