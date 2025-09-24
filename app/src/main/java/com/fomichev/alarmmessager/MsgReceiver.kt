@@ -34,7 +34,8 @@ class MsgReceiver:  BroadcastReceiver() {
                 val cfg = settingsRepository.alarmCfgFlow.first()
                 val msg = settingsRepository.msgFlow.first()
                 if(cfg.isStarted){
-                    sendSMS(context, msg.phoneNumber, msg.text)
+                    sendSMS(context, msg.phoneNumber1, msg.text)
+                    sendSMS(context, msg.phoneNumber2, msg.text)
                 }
                 Timber.d("MsgReceiver onReceive")
             } finally {
@@ -47,6 +48,7 @@ class MsgReceiver:  BroadcastReceiver() {
 
     fun sendSMS(context: Context?, phoneNumber: String, msg: String) {
         if(context == null) return
+        if(phoneNumber.length == 0) return
         try {
             val smsManager: SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 context.getSystemService(

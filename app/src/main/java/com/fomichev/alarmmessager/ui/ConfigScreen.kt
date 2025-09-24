@@ -23,12 +23,20 @@ fun ConfigScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var phoneNumber by rememberSaveable { mutableStateOf(msg.phoneNumber) }
-        PhoneField(phoneNumber,
+        var phoneNumber1 by rememberSaveable { mutableStateOf(msg.phoneNumber1) }
+        var phoneNumber2 by rememberSaveable { mutableStateOf(msg.phoneNumber2) }
+
+        PhoneField(phoneNumber1,
             modifier = Modifier.padding(16.dp),
             mask = "+0-000-000-00-00",
             maskNumber = '0',
-            onPhoneChanged = { phoneNumber = it })
+            onPhoneChanged = { phoneNumber1 = it })
+
+        PhoneField(phoneNumber2,
+            modifier = Modifier.padding(16.dp),
+            mask = "+0-000-000-00-00",
+            maskNumber = '0',
+            onPhoneChanged = { phoneNumber2 = it })
 
         var msgText by rememberSaveable { mutableStateOf(msg.text) }
         MsgTextField(
@@ -39,7 +47,7 @@ fun ConfigScreen(
             onMsgChanged = { msgText = it }
         )
 
-        Button(onClick = { onSave(Msg(phoneNumber, msgText)) }) {
+        Button(onClick = { onSave(Msg(phoneNumber1, phoneNumber2, msgText)) }) {
             Text(stringResource(R.string.save))
         }
     }

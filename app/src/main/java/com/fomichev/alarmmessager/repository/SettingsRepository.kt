@@ -33,20 +33,23 @@ class SettingsRepository @Inject constructor(@ApplicationContext val context: Co
             )
         }
 
-    val PHONE_NUMBER = stringPreferencesKey("phone_number")
+    val PHONE_NUMBER_1 = stringPreferencesKey("phone_number1")
+    val PHONE_NUMBER_2 = stringPreferencesKey("phone_number2")
     val MSG_TEXT = stringPreferencesKey("msg_text")
 
     val msgFlow: Flow<Msg> = context.dataStore.data
         .map { preferences ->
             Msg(
-                preferences[PHONE_NUMBER] ?: "",
+                preferences[PHONE_NUMBER_1] ?: "",
+                preferences[PHONE_NUMBER_2] ?: "",
                 preferences[MSG_TEXT] ?: ""
             )
         }
 
     suspend fun saveMsg(msg: Msg) {
         context.dataStore.edit { preferences ->
-            preferences[PHONE_NUMBER] = msg.phoneNumber
+            preferences[PHONE_NUMBER_1] = msg.phoneNumber1
+            preferences[PHONE_NUMBER_2] = msg.phoneNumber2
             preferences[MSG_TEXT] = msg.text
         }
     }
