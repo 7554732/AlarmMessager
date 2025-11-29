@@ -104,10 +104,11 @@ fun StartScreen(
                         startTime + (timeToAlarm + timeToMsg) * DIVISOR_SEC_IN_MIN * DIVISOR_ML_SEC,
                         "y-M-d H:m:s"
                     )
-                    + " " + timeLeftToMsg?.let {
-                        Hours(it).toString() + ":" +
-                        Minutes(it).toString() + ":" +
-                        Seconds(it).toString()
+                    + " " + timeLeftToMsg?.let {t ->
+                        val hh = String.format("%02d", Hours(t))
+                        val mm = String.format("%02d", Minutes(t))
+                        val ss = String.format("%02d", Seconds(t))
+                        "$hh:$mm:$ss"
                     }
                 else "",
             textAlign = TextAlign.Center
